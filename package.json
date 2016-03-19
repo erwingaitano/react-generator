@@ -1,0 +1,24 @@
+{
+  "name": "react-generator",
+  "version": "0.0.2",
+  "description": "Folder-file generators for react projects",
+  "main": "./index.js",
+  "bin": {
+    "react-generator": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react",
+    "generator"
+  ],
+  "author": "Erwin Gaitan O <erwingaitano@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^2.9.0",
+    "fs-extra": "^0.26.7",
+    "mkdirp": "^0.5.1",
+    "node-dir": "^0.1.11"
+  }
+}
