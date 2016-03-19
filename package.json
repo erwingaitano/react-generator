@@ -1,7 +1,7 @@
 {
   "name": "react-generator",
   "version": "0.0.2",
-  "description": "Folder-file generators for react projects",
+  "description": "Command line folder-file generators for react projects",
   "main": "./index.js",
   "bin": {
     "react-generator": "./index.js"
