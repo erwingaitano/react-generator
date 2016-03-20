@@ -1,5 +1,5 @@
 /**
- * @module
+ * @module Component
  */
 
 'use strict';
@@ -15,7 +15,7 @@ const utils = require('../utils');
  *
  * @param  {myCystomString} fileString   File template string
  * @param  {String}         compName     Component name
- * @param  {Object}         options
+ * @param  {Object=}        options
  * @param  {Bool}           options.css  Should have css stuff
  * @return {String}         _            fileString transformed
  */
@@ -79,19 +79,21 @@ function getOutputDirForComponent(dirpath, cb) {
 }
 
 /**
- * Generate the files and write them in the outputdir path
+ * Generate the files from the template files and write them in the outputdir path
  *
- * @param  {String}   dirname        Component template folder
- * @param  {String}   compName       Component name
- * @param  {String}   outputDir      Directory where the component will be copied
- * @param  {Object}   options
- * @param  {Object}   options.css    Should have css stuff
- * @param  {Object}   options.test   Should have test stuff
- * @param  {Function} cb             Callback returning the compName and outputDir
- * @return {[type]}   [description]
+ * @param {String}   dirname       Component template folder containing the files
+ * @param {String}   compName      Component name
+ * @param {String}   outputDir     Directory where the component will be copied
+ * @param {Object=}  options
+ * @param {Bool}     options.css   Should have css stuff
+ * @param {Bool}     options.test  Should have test stuff
+ * @param {Function} cb            Callback returning the compName and outputDir
  */
 function generateFiles(dirname, compName, outputDir, options, cb) {
-  const settings = Object.assign({}, options);
+  const settings = Object.assign({
+    css: true,
+    test: true
+  }, options);
 
   fse.copy(dirname, `${outputDir}/${compName}`, {
     filter(file) {

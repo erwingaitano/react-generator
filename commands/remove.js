@@ -1,5 +1,5 @@
 /**
- * @module
+ * @module Remove
  */
 
 'use strict';
