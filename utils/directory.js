@@ -7,15 +7,27 @@
 const fse = require('fs-extra');
 const path = require('path');
 
+/**
+ * Get all top level directories of the given path
+ *
+ * @param  {String} srcpath  The src where to look for the directories
+ * @return {Array}  List     of top level directories
+ */
 function getDirectories(srcpath) {
   return fse.readdirSync(srcpath)
     .filter(file => fse.statSync(path.join(srcpath, file)).isDirectory());
 }
 
+/**
+ * Returns sourceFolder in the form src, app or ./
+ * This is only for performance reasons, if the path given has a src or app folder,
+ * that will be the starting point so we avoid looking in the node_modules or
+ * other non desired directories.
+ *
+ * @param  {String} srcpath  The starting dir where to look for src or app folder
+ * @return {String} _        Source folder
+ */
 function getSourceFolder(srcpath) {
-  // If not options.dir was provided, we set outputDir to the form (src|app|./)/**/components
-  // we return src, or app folder in order to avoid find in node_modules or another
-  // no-useful directory. But if src nor app folder exists, we default to ./
   return getDirectories(srcpath).find(dir => dir === 'src' || dir === 'app') || './';
 }
 
