@@ -1,3 +1,7 @@
+/**
+ * @module
+ */
+
 'use strict';
 
 const fse = require('fs-extra');

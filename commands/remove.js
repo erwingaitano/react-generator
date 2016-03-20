@@ -7,7 +7,7 @@
 const fse = require('fs-extra');
 const program = require('commander');
 const dir = require('node-dir');
-const utils = require('../utils');
+const dirUtility = require('../utils/directory');
 
 /**
  * <Pure> Returns the folderpath to eliminate.
@@ -22,7 +22,7 @@ function getFolderToEliminatePath(dirpath, name) {
 }
 
 function runRemoveComponent(name) {
-  const sourceFolder = utils.getSourceFolder('./');
+  const sourceFolder = dirUtility.getSourceFolder('./');
 
   dir.subdirs(sourceFolder, (err, subdirs) => {
     if (err) throw err;
