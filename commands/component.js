@@ -32,7 +32,7 @@ function componentInit(name, options) {
       }
     },
     () => {
-      console.log(`Component ${name} created!`);
+      console.log('Component %s created in %s%s', name, outputDir, name);
     });
   }
 
