@@ -10,3 +10,5 @@ require('./commands/remove');
 
 program.version(require('./package.json').version);
 program.parse(process.argv);
+
+if (!program.args.length) console.log(program.helpInformation());
