@@ -27,12 +27,13 @@ function componentInit(name, options) {
           ws = ws.replace(/[\s\S].*\/\* CSS \*\/([\s\S]*?)\/\* CSS-END \*\/.*[\s\S]/, '$1');
         }
 
+        ws = ws.replace(/__COMPONENT_NAME__/g, name);
         fse.outputFileSync(`${outputDir}/${name}/${name}.${filenameExt}`, ws);
         return false;
       }
     },
     () => {
-      console.log('Component %s created in %s%s', name, outputDir, name);
+      console.log('Component %s created in %s/%s', name, outputDir, name);
     });
   }
 

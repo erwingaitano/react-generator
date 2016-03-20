@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 /* CSS */
-import './component.scss';
+import './__COMPONENT_NAME__.scss';
 /* CSS-END */
 
 export default class Component extends React.Component {
