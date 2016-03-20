@@ -1,3 +1,7 @@
+/**
+ * @module
+ */
+
 'use strict';
 
 const fse = require('fs-extra');
@@ -8,9 +12,9 @@ const utils = require('../utils');
 /**
  * <Pure> Returns the folderpath to eliminate.
  *
- * @param  {String=} dirpath  Component parent folder.
- * @param  {String}  name     Component name.
- * @return {String}  _        The component dirpath.
+ * @param  {String=} dirpath  Component parent folder
+ * @param  {String}  name     Component name
+ * @return {String}  _        The component dirpath
  */
 function getFolderToEliminatePath(dirpath, name) {
   if (!dirpath) dirpath = '.';

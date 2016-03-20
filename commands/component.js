@@ -1,3 +1,7 @@
+/**
+ * @module
+ */
+
 'use strict';
 
 const fse = require('fs-extra');
@@ -9,8 +13,8 @@ const utils = require('../utils');
 /**
  * <Pure> Returns a fileString with all the template boilerplate replaced.
  *
- * @param  {myCystomString} fileString   File template string.
- * @param  {String}         compName     Component name.
+ * @param  {myCystomString} fileString   File template string
+ * @param  {String}         compName     Component name
  * @param  {Object}         options
  * @param  {Bool}           options.css  Should have css stuff
  * @return {String}         _            fileString transformed
