@@ -6,6 +6,15 @@ const program = require('commander');
 const dir = require('node-dir');
 const utils = require('../utils');
 
+/**
+ * <Pure> Returns a fileString with all the template boilerplate replaced.
+ *
+ * @param  {myCystomString} fileString   File template string.
+ * @param  {String}         compName     Component name.
+ * @param  {Object}         options
+ * @param  {Bool}           options.css  Should have css stuff
+ * @return {String}         _            fileString transformed
+ */
 function getFileStringTransformed(fileString, compName, options) {
   let output;
   const settings = Object.assign({
@@ -22,6 +31,12 @@ function getFileStringTransformed(fileString, compName, options) {
   return output;
 }
 
+/**
+ * <Pure> Get relevant info from the file
+ *
+ * @param  {String} filepath  The path of the file
+ * @return {Object}
+ */
 function getInfoFromFilenamePath(filepath) {
   const tmpFilenamePath = filepath.split('/');
   const tmpFilename = tmpFilenamePath.pop().split('.');
@@ -37,7 +52,13 @@ function getInfoFromFilenamePath(filepath) {
   };
 }
 
-function getOutputDir(dirpath, cb) {
+/**
+ * Get dirpath for the components folder
+ *
+ * @param {String=}  dirpath  Folder where components will be inserted
+ * @param {Function} cb       Callback returning the outputDir
+ */
+function getOutputDirForComponent(dirpath, cb) {
   if (dirpath) {
     const outputDir = dirpath;
     cb(null, outputDir);
@@ -53,10 +74,22 @@ function getOutputDir(dirpath, cb) {
   }
 }
 
-function generateTemplate(dirname, compName, outputDir, options, cb) {
+/**
+ * Generate the files and write them in the outputdir path
+ *
+ * @param  {String}   dirname        Component template folder
+ * @param  {String}   compName       Component name
+ * @param  {String}   outputDir      Directory where the component will be copied
+ * @param  {Object}   options
+ * @param  {Object}   options.css    Should have css stuff
+ * @param  {Object}   options.test   Should have test stuff
+ * @param  {Function} cb             Callback returning the compName and outputDir
+ * @return {[type]}   [description]
+ */
+function generateFiles(dirname, compName, outputDir, options, cb) {
   const settings = Object.assign({}, options);
 
-  fse.copy(path.resolve(dirname, '../templates/component'), `${outputDir}/${compName}`, {
+  fse.copy(dirname, `${outputDir}/${compName}`, {
     filter(file) {
       if (!settings.css && file.split('/').pop().indexOf('.scss') !== -1) return false;
       if (!settings.test && file.split('/').pop().indexOf('.spec.js') !== -1) return false;
@@ -76,8 +109,9 @@ function generateTemplate(dirname, compName, outputDir, options, cb) {
 }
 
 function run(name, options) {
-  getOutputDir(options.dir, (err, outputDir) => {
-    generateTemplate(__dirname, name, outputDir, options, (err, name, outputDir) => {
+  getOutputDirForComponent(options.dir, (err, outputDir) => {
+    const componentTemplateDir = path.resolve(__dirname, '../templates/component');
+    generateFiles(componentTemplateDir, name, outputDir, options, (err, name, outputDir) => {
       if (err) {
         console.log(err.message);
         return;
@@ -102,6 +136,6 @@ program
 module.exports = {
   getFileStringTransformed,
   getInfoFromFilenamePath,
-  getOutputDir,
-  generateTemplate
+  getOutputDirForComponent,
+  generateFiles
 };
