@@ -10,7 +10,7 @@ const dir = require('node-dir');
 const dirUtility = require('../utils/directory');
 
 /**
- * <Pure> Returns the folderpath to eliminate.
+ * -Pure- Returns the folderpath to eliminate.
  *
  * @param  {String=} dirpath  Component parent folder
  * @param  {String}  name     Component name
@@ -42,6 +42,7 @@ program
   .command('remove-component <name>')
   .alias('rc')
   .description('Remove a component with all its files.')
+  .option('-d, --dir <directory>', 'Directory where to look for the component.')
   .action(runRemoveComponent);
 
 module.exports = {

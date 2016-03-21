@@ -11,13 +11,13 @@ const dir = require('node-dir');
 const dirUtility = require('../utils/directory');
 
 /**
- * <Pure> Returns a fileString with all the template boilerplate replaced.
+ * -Pure- Returns a fileString with all the template boilerplate replaced.
  *
- * @param  {myCystomString} fileString   File template string
- * @param  {String}         compName     Component name
- * @param  {Object=}        options
- * @param  {Bool}           options.css  Should have css stuff
- * @return {String}         _            fileString transformed
+ * @param  {String}  fileString   File template string
+ * @param  {String}  compName     Component name
+ * @param  {Object=} options
+ * @param  {Bool}    options.css  Should have css stuff
+ * @return {String}  _            fileString transformed
  */
 function getFileStringTransformed(fileString, compName, options) {
   let output;
@@ -26,9 +26,9 @@ function getFileStringTransformed(fileString, compName, options) {
   }, options);
 
   if (!settings.css) {
-    output = fileString.replace(/[\s\S].*\/\* CSS \*\/([\s\S]*?)\/\* CSS-END \*\/.*[\s\S]/, '\n');
+    output = fileString.replace(/[\s\S]*\/\* CSS \*\/([\s\S]*?)\/\* CSS-END \*\/.*[\s]/, '\n');
   } else {
-    output = fileString.replace(/[\s\S].*\/\* CSS \*\/([\s\S]*?)\/\* CSS-END \*\/.*[\s\S]/, '$1');
+    output = fileString.replace(/[\s\S]*\/\* CSS \*\/([\s\S]*?)\/\* CSS-END \*\/.*[\s]/, '$1');
   }
 
   output = output.replace(/__COMPONENT_NAME__/g, compName);
@@ -36,7 +36,7 @@ function getFileStringTransformed(fileString, compName, options) {
 }
 
 /**
- * <Pure> Get relevant info from the file
+ * -Pure- Get relevant info from the file
  *
  * @param  {String} filepath  The path of the file
  * @return {Object}
@@ -60,7 +60,7 @@ function getInfoFromFilenamePath(filepath) {
  * Get dirpath for the components folder
  *
  * @param {String=}  dirpath  Folder where components will be inserted
- * @param {Function} cb       Callback returning the outputDir
+ * @param {Function} cb       Callback(err, outputDir)
  */
 function getOutputDirForComponent(dirpath, cb) {
   if (dirpath) {
@@ -87,7 +87,7 @@ function getOutputDirForComponent(dirpath, cb) {
  * @param {Object=}  options
  * @param {Bool}     options.css   Should have css stuff
  * @param {Bool}     options.test  Should have test stuff
- * @param {Function} cb            Callback returning the compName and outputDir
+ * @param {Function} cb            cb(err, compName, outputDir)
  */
 function generateFiles(dirname, compName, outputDir, options, cb) {
   const settings = Object.assign({
@@ -123,7 +123,7 @@ function run(name, options) {
         return;
       }
 
-      console.log('Component %s created in %s/%s', name, outputDir, name);
+      console.log('Component %s created in %s/%s', name, outputDir.replace(/\/$/, ''), name);
     });
   });
 }
