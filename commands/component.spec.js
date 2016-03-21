@@ -5,26 +5,35 @@ describe('Component', () => {
   describe('#getFileStringTransformed()', () => {
     it('should leave css stuff', () => {
       const compName = '__dump_comp__';
-      const testString = `/* CSS */
-                      random things inside
-                      /* CSS-END */
-                      `;
       const expectedString = 'random things inside';
+      const testString = `/* CSS */${expectedString}/* CSS-END */`;
+      const testString2 = `/* CSS */\n${expectedString}\n/* CSS-END */`;
+      const testString3 = `/* CSS */\n${expectedString}\na \nb\n c/* CSS-END */`;
+      const testString4 = `ee\n /* CSS */\n${expectedString}\n /* CSS-END */\n dummy stuff`;
 
       const resultString = Component.getFileStringTransformed(testString, compName);
-      should(resultString.trim()).be.equal(expectedString);
+      const resultString2 = Component.getFileStringTransformed(testString2, compName);
+      const resultString3 = Component.getFileStringTransformed(testString3, compName);
+      const resultString4 = Component.getFileStringTransformed(testString4, compName);
+
+      should(resultString).be.equal(expectedString);
+      should(resultString2).be.equal(expectedString);
+      should(resultString3).be.equal(`${expectedString}\na \nb\n c`);
+      should(resultString4).be.equal(`ee\n ${expectedString}\n dummy stuff`);
     });
 
     it('should remove css stuff', () => {
       const compName = '__dump_comp__';
-      const testString = `/* CSS */
-                      random things
-                      /* CSS-END */
-                      `;
-      const expectedString = '';
+      const testString = '/* CSS */random things inside/* CSS-END */';
+      const testString2 = 'ee\n /* CSS */\n$random things \n/* CSS-END */\n dummy stuff';
 
-      const resultString = Component.getFileStringTransformed(testString, compName, { css: false });
-      should(resultString.trim()).be.equal(expectedString);
+      const resultString = Component.getFileStringTransformed(testString, compName,
+        { css: false });
+      const resultString2 = Component.getFileStringTransformed(testString2, compName,
+        { css: false });
+
+      should(resultString.trim()).be.equal('');
+      should(resultString2.trim()).be.equal(`ee\n  dummy stuff`);
     });
 
     it('should replace __COMPONENT_NAME__ with the component name', () => {
@@ -61,7 +70,7 @@ describe('Component', () => {
   });
 
 
-  describe('#getOutputDirForComponent', () => {
+  describe('#getOutputDirForComponent()', () => {
     it('should return the right folderpath for components', (done) => {
       const testPath = './';
       const expectedResult = './';
@@ -81,21 +90,33 @@ describe('Component', () => {
     });
   });
 
-  describe('#generateFiles', () => {
+  describe('This generate output files', () => {
     const compName = '__dump_comp__';
 
-    it('should write the component generated files in the output dir', done => {
-      const path = require('path');
-      const outputDir = './';
-      const componentTemplateDir = path.resolve(__dirname, '../templates/component');
+    describe('#generateFiles()', () => {
+      it('should write the component generated files in the output dir', done => {
+        const path = require('path');
+        const outputDir = './';
+        const componentTemplateDir = path.resolve(__dirname, '../templates/component');
 
-      Component.generateFiles(componentTemplateDir, compName, outputDir, null,
-        (err, componentName, resultOutputDir) => {
+        Component.generateFiles(componentTemplateDir, compName, outputDir, null,
+          (err, componentName, resultOutputDir) => {
+            if (err) done(err);
+            should(componentName).be.equal(compName);
+            should(resultOutputDir).be.equal(outputDir);
+            done();
+          });
+      });
+    });
+
+    describe('#createComponent()', () => {
+      it('should create a component', done => {
+        Component.createComponent(compName, null, (err, dirGenerated) => {
           if (err) done(err);
-          should(componentName).be.equal(compName);
-          should(resultOutputDir).be.equal(outputDir);
+          should(dirGenerated).be.equal(`./${compName}`);
           done();
         });
+      });
     });
 
     after(done => {
@@ -104,15 +125,10 @@ describe('Component', () => {
 
       try {
         fse.removeSync(folderToEliminate);
-        console.log('Component deleted from %s', folderToEliminate);
         done();
       } catch (e) {
         done(e);
       }
     });
-  });
-
-  describe('#run', () => {
-    it('should return -1 when the value is not present');
   });
 });

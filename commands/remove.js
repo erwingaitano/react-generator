@@ -21,7 +21,7 @@ function getFolderToEliminatePath(dirpath, name) {
   return `${dirpath}/${name}`;
 }
 
-function runRemoveComponent(name) {
+function removeComponent(name) {
   const sourceFolder = dirUtility.getSourceFolder('./');
 
   dir.subdirs(sourceFolder, (err, subdirs) => {
@@ -46,7 +46,7 @@ program
   .alias('rc')
   .description('Remove a component with all its files.')
   .option('-d, --dir <directory>', 'Directory where to look for the component.')
-  .action(runRemoveComponent);
+  .action(removeComponent);
 
 module.exports = {
   getFolderToEliminatePath

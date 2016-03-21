@@ -25,10 +25,10 @@ function getFileStringTransformed(fileString, compName, options) {
     css: true
   }, options);
 
-  if (!settings.css) {
-    output = fileString.replace(/[\s\S]*\/\* CSS \*\/([\s\S]*?)\/\* CSS-END \*\/.*[\s]/, '\n');
+  if (settings.css) {
+    output = fileString.replace(/\/\* CSS \*\/\s*([\s|\S]*?)\s*\/\* CSS-END \*\//, '$1');
   } else {
-    output = fileString.replace(/[\s\S]*\/\* CSS \*\/([\s\S]*?)\/\* CSS-END \*\/.*[\s]/, '$1');
+    output = fileString.replace(/\/\* CSS \*\/([\s|\S]*?)\/\* CSS-END \*\/ *\n?([\s|\S]*)/, '$2');
   }
 
   output = output.replace(/__COMPONENT_NAME__/g, compName);
@@ -117,19 +117,24 @@ function generateFiles(dirname, compName, outputDir, options, cb) {
 /**
  * Create a component <name> in the relevant directory
  *
- * @param {String}  name     Name of the component
- * @param {Object=} options  Options from the command line
+ * @param {String}   name     Name of the component
+ * @param {Object=}  options  Options from the command line
+ * @param {Function} cb       cb(err, dirGenerated);
  */
-function run(name, options) {
-  getOutputDirForComponent(options.dir, (err, outputDir) => {
+function createComponent(name, options, cb) {
+  const settings = Object.assign({}, options);
+  getOutputDirForComponent(settings.dir, (err, outputDir) => {
     const componentTemplateDir = path.resolve(__dirname, '../templates/component');
     generateFiles(componentTemplateDir, name, outputDir, options, (err, name, outputDir) => {
       if (err) {
         console.log(err.message);
+        cb(err);
         return;
       }
 
-      console.log('Component %s created in %s/%s', name, outputDir.replace(/\/$/, ''), name);
+      const dirGenerated = outputDir.replace(/\/$/, '/') + name;
+      if (cb) cb(null, dirGenerated);
+      console.log('Component %s created in %s', name, dirGenerated);
     });
   });
 }
@@ -146,11 +151,12 @@ program
   .option('', 'folder inside a ./src, ./app folder or to the current dir.')
   .option('-C, --no-css', 'Don\'t generate the scss file.')
   .option('-T, --no-test', 'Don\'t generate the test (component.spec.js) file.')
-  .action(run);
+  .action(createComponent);
 
 module.exports = {
   getFileStringTransformed,
   getInfoFromFilenamePath,
   getOutputDirForComponent,
-  generateFiles
+  generateFiles,
+  createComponent
 };
