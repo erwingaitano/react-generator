@@ -6,7 +6,7 @@ const Component = require('./component');
 
 describe('Component', function () {
   describe('#getFileStringTransformed()', function () {
-    it('should leave css stuff', function () {
+    it('should leave css stuff', () => {
       const compName = '__dump_comp__';
       const expectedString = 'random things inside';
       const testString = `/* CSS */${expectedString}/* CSS-END */`;
@@ -25,7 +25,7 @@ describe('Component', function () {
       should(resultString4).be.equal(`ee\n ${expectedString}\n dummy stuff`);
     });
 
-    it('should remove css stuff', function () {
+    it('should remove css stuff', () => {
       const compName = '__dump_comp__';
       const testString = '/* CSS */random things inside/* CSS-END */';
       const testString2 = 'ee\n /* CSS */\n$random things \n/* CSS-END */\n dummy stuff';
@@ -39,7 +39,7 @@ describe('Component', function () {
       should(resultString2.trim()).be.equal(`ee\n  dummy stuff`);
     });
 
-    it('should replace __COMPONENT_NAME__ with the component name', function () {
+    it('should replace __COMPONENT_NAME__ with the component name', () => {
       const compName = '__dump_comp__';
       const testString = 'this; is; a test; __COMPONENT_NAME__ string; string;';
       const expectedString = `this; is; a test; ${compName} string; string;`;
@@ -49,7 +49,7 @@ describe('Component', function () {
   });
 
   describe('#getInfoFromFilenamePath()', function () {
-    it('should get right object output', function () {
+    it('should get right object output', () => {
       const testFilepath1 = '/User/kappa/erwingo.js';
       const expectedResult1 = {
         baseDir: '/User/kappa',
@@ -74,26 +74,31 @@ describe('Component', function () {
 
 
   describe('#getOutputDirForComponent()', function () {
-    it('should return the right folderpath for components', (done) => {
+    it('should return the right folderpath for components', done => {
       const testPath = './';
       const expectedResult = './';
       const testPath2 = './erwin/go';
       const expectedResult2 = './erwin/go';
 
       Component.getOutputDirForComponent(testPath, (err, outputDir) => {
-        if (err) done(err);
+        if (err) { done(err); return; }
         should(outputDir).be.equal(expectedResult);
 
         Component.getOutputDirForComponent(testPath2, (err, outputDir) => {
-          if (err) done(err);
+          if (err) { done(err); return; }
           should(outputDir).be.equal(expectedResult2);
-          done();
+
+          Component.getOutputDirForComponent(null, (err, outputDir) => {
+            if (err) { done(err); return; }
+            should(outputDir).be.equal(testPath);
+            done();
+          });
         });
       });
     });
   });
 
-  describe('This generate output files', function () {
+  describe('Following tests generate output files:', function () {
     const compName = '__dump_comp__';
 
     describe('#generateFiles()', function () {
@@ -114,9 +119,10 @@ describe('Component', function () {
 
     describe('#createComponent()', function () {
       it('should create a component', done => {
-        Component.createComponent(compName, null, (err, dirGenerated) => {
+        Component.createComponent(compName, null, (err, name, dirGenerated) => {
           if (err) done(err);
-          should(dirGenerated).be.equal(`./${compName}`);
+          should(name).be.equal(compName);
+          should(dirGenerated).be.equal(dirGenerated);
           done();
         });
       });

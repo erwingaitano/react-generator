@@ -133,8 +133,7 @@ function createComponent(name, options, cb) {
       }
 
       const dirGenerated = outputDir.replace(/\/$/, '/') + name;
-      if (cb) cb(null, dirGenerated);
-      console.log('Component %s created in %s', name, dirGenerated);
+      if (cb) cb(null, name, dirGenerated);
     });
   });
 }
@@ -142,6 +141,7 @@ function createComponent(name, options, cb) {
 /**
  * Command line instructions
  */
+ /* istanbul ignore next */
 program
   .command('component <name>')
   .alias('c')
@@ -151,7 +151,11 @@ program
   .option('', 'folder inside a ./src, ./app folder or to the current dir.')
   .option('-C, --no-css', 'Don\'t generate the scss file.')
   .option('-T, --no-test', 'Don\'t generate the test (component.spec.js) file.')
-  .action(createComponent);
+  .action((name, options) => {
+    createComponent(name, options, (name, dirGenerated) => {
+      console.log('Component %s created in %s', name, dirGenerated);
+    });
+  });
 
 module.exports = {
   getFileStringTransformed,

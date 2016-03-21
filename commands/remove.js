@@ -21,7 +21,13 @@ function getFolderToEliminatePath(dirpath, name) {
   return `${dirpath}/${name}`;
 }
 
-function removeComponent(name) {
+/**
+ * Remove a component with all its files
+ *
+ * @param {String}   name  Component name
+ * @param {Function} cb    cb(err, componentPath)
+ */
+function removeComponent(name, cb) {
   const sourceFolder = dirUtility.getSourceFolder('./');
 
   dir.subdirs(sourceFolder, (err, subdirs) => {
@@ -31,9 +37,9 @@ function removeComponent(name) {
       const componentsFolder = subdirs.find(el => /components$/.test(el));
       const folderToEliminate = getFolderToEliminatePath(componentsFolder, name);
       fse.removeSync(folderToEliminate);
-      console.log('Component deleted from %s', folderToEliminate);
+      cb(null, folderToEliminate);
     } catch (e) {
-      console.log(e.message);
+      cb(e);
     }
   });
 }
@@ -41,13 +47,19 @@ function removeComponent(name) {
 /**
  * Command line instructions
  */
+/* istanbul ignore next */
 program
   .command('remove-component <name>')
   .alias('rc')
   .description('Remove a component with all its files.')
   .option('-d, --dir <directory>', 'Directory where to look for the component.')
-  .action(removeComponent);
+  .action((name) => {
+    removeComponent(name, (err, componentPath) => {
+      console.log('Component deleted from %s', componentPath);
+    });
+  });
 
 module.exports = {
-  getFolderToEliminatePath
+  getFolderToEliminatePath,
+  removeComponent
 };
