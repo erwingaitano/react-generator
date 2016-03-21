@@ -114,6 +114,12 @@ function generateFiles(dirname, compName, outputDir, options, cb) {
   () => cb(null, compName, outputDir));
 }
 
+/**
+ * Create a component <name> in the relevant directory
+ *
+ * @param {String}  name     Name of the component
+ * @param {Object=} options  Options from the command line
+ */
 function run(name, options) {
   getOutputDirForComponent(options.dir, (err, outputDir) => {
     const componentTemplateDir = path.resolve(__dirname, '../templates/component');
@@ -128,6 +134,9 @@ function run(name, options) {
   });
 }
 
+/**
+ * Command line instructions
+ */
 program
   .command('component <name>')
   .alias('c')

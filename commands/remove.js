@@ -38,6 +38,9 @@ function runRemoveComponent(name) {
   });
 }
 
+/**
+ * Command line instructions
+ */
 program
   .command('remove-component <name>')
   .alias('rc')
