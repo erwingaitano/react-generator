@@ -21,7 +21,7 @@ describe('Component', function () {
 
       should(resultString).be.equal(expectedString);
       should(resultString2).be.equal(expectedString);
-      should(resultString3).be.equal(`${expectedString}\na \nb\n c `);
+      should(resultString3).be.equal(`${expectedString}\na \nb\n c`);
       should(resultString4).be.equal(`ee\n ${expectedString}\n dummy stuff`);
     });
 
@@ -64,7 +64,7 @@ describe('Component', function () {
       const expectedResult2 = {
         baseDir: '/User/kappa/ross',
         ext: 'js.jsx',
-        realExt: 'jsxx'
+        realExt: 'jsx'
       };
 
       const result2 = Component.getInfoFromFilenamePath(testFilepath2);
