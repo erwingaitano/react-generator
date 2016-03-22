@@ -20,7 +20,7 @@ describe('Remove', function () {
   describe('#removeComponent()', function () {
     const fse = require('fs-extra');
     const compName = '__comp__';
-    const dumpComponentsPath = './__test__/__dump__/components';
+    const dumpComponentsPath = '__test__/__dump__/components';
 
     before('create a dumb component directory', () => {
       fse.mkdirsSync(`${dumpComponentsPath}/${compName}`);
@@ -35,7 +35,7 @@ describe('Remove', function () {
     });
 
     after('clean dump component directory if exists', () => {
-      fse.removeSync(`${dumpComponentsPath}/${compName}`);
+      fse.removeSync('__test__');
     });
   });
 });

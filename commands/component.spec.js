@@ -72,7 +72,6 @@ describe('Component', function () {
     });
   });
 
-
   describe('#getOutputDirForComponent()', function () {
     it('should return the right folderpath for components', done => {
       const testPath = './';
@@ -87,13 +86,30 @@ describe('Component', function () {
         Component.getOutputDirForComponent(testPath2, (err, outputDir) => {
           if (err) { done(err); return; }
           should(outputDir).be.equal(expectedResult2);
-
-          Component.getOutputDirForComponent(null, (err, outputDir) => {
-            if (err) { done(err); return; }
-            should(outputDir).be.equal(testPath);
-            done();
-          });
+          done();
         });
+      });
+    });
+
+    it('should return current dir if not inside components folder and no dir provided',
+      done => {
+        Component.getOutputDirForComponent(null, (err, outputDir) => {
+          if (err) { done(err); return; }
+          should(outputDir).be.equal('./');
+          done();
+        });
+      });
+
+    it('should return inside components folder it exists and no dir provided', done => {
+      const fse = require('fs-extra');
+      const dumbDir = '__test__/__dump__/components';
+
+      fse.mkdirsSync(dumbDir);
+      Component.getOutputDirForComponent(null, (err, outputDir) => {
+        if (err) { done(err); return; }
+        should(outputDir).be.equal(dumbDir);
+        fse.removeSync('__test__');
+        done();
       });
     });
   });
@@ -132,12 +148,8 @@ describe('Component', function () {
       const fse = require('fs-extra');
       const folderToEliminate = `./${compName}`;
 
-      try {
-        fse.removeSync(folderToEliminate);
-        done();
-      } catch (e) {
-        done(e);
-      }
+      fse.removeSync(folderToEliminate);
+      done();
     });
   });
 });
