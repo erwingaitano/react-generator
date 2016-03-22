@@ -1,9 +1,11 @@
 # react-generator
 
-Command line utility to generate folder-file templates for react projects
-
 [![Build Status](https://travis-ci.org/erwingaitano/react-generator.svg?branch=master)](https://travis-ci.org/erwingaitano/react-generator)
 [![Coverage Status](https://coveralls.io/repos/github/erwingaitano/react-generator/badge.svg?branch=master)](https://coveralls.io/github/erwingaitano/react-generator?branch=master)
+[![Dependency Status](https://david-dm.org/erwingaitano/react-generator.svg)](https://david-dm.org/erwingaitano/react-generator)
+[![devDependency Status](https://david-dm.org/erwingaitano/react-generator/dev-status.svg)](https://david-dm.org/erwingaitano/react-generator#info=devDependencies)
+
+Command line utility to generate folder-file templates for react projects
 
 ## Installation
 
