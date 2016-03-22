@@ -119,7 +119,7 @@ function generateFiles(dirname, compName, outputDir, options, cb) {
  *
  * @param {String}   name     Name of the component
  * @param {Object=}  options  Options from the command line
- * @param {Function} cb       cb(err, dirGenerated);
+ * @param {Function} cb       cb(err, name, dirGenerated);
  */
 function createComponent(name, options, cb) {
   const settings = Object.assign({}, options);
@@ -128,7 +128,7 @@ function createComponent(name, options, cb) {
     generateFiles(componentTemplateDir, name, outputDir, options, (err, name, outputDir) => {
       if (err) { cb(err); return; }
 
-      const dirGenerated = outputDir.replace(/\/$/, '/') + name;
+      const dirGenerated = outputDir.concat('/').replace(/\/\/$/, '/') + name;
       if (cb) cb(null, name, dirGenerated);
     });
   });
@@ -148,7 +148,8 @@ program
   .option('-C, --no-css', 'Don\'t generate the scss file.')
   .option('-T, --no-test', 'Don\'t generate the test (component.spec.js) file.')
   .action((name, options) => {
-    createComponent(name, options, (name, dirGenerated) => {
+    createComponent(name, options, (err, name, dirGenerated) => {
+      if (err) throw err;
       console.log('Component %s created in %s', name, dirGenerated);
     });
   });

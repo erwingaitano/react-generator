@@ -28,7 +28,7 @@ function getDirectories(srcpath) {
  * @return {String} _        Source folder
  */
 function getSourceFolder(srcpath) {
-  return getDirectories(srcpath).find(dir => dir === 'src' || dir === 'app') || './';
+  return getDirectories(srcpath).find(dir => dir === 'src' || dir === 'app') || srcpath;
 }
 
 module.exports = {

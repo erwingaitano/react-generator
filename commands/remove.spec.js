@@ -27,7 +27,7 @@ describe('Remove', function () {
     });
 
     it('should remove the component and its files', done => {
-      Remove.removeComponent(compName, (err, componentPath) => {
+      Remove.removeComponent(compName, null, (err, componentPath) => {
         if (err) {done(err); return; }
         should(componentPath).be.equal(`${dumpComponentsPath}/${compName}`);
         done();

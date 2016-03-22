@@ -27,11 +27,15 @@ function getFolderToEliminatePath(dirpath, name) {
  * @param {String}   name  Component name
  * @param {Function} cb    cb(err, componentPath)
  */
-function removeComponent(name, cb) {
-  const sourceFolder = dirUtility.getSourceFolder('./');
+function removeComponent(name, options, cb) {
+  const settings = Object.assign({
+    dir: './'
+  }, options);
 
+  const sourceFolder = dirUtility.getSourceFolder(settings.dir);
+  console.log(sourceFolder);
   dir.subdirs(sourceFolder, (err, subdirs) => {
-    if (err) throw err;
+    if (err) cb(err);
 
     try {
       const componentsFolder = subdirs.find(el => /components$/.test(el));
@@ -53,8 +57,8 @@ program
   .alias('rc')
   .description('Remove a component with all its files.')
   .option('-d, --dir <directory>', 'Directory where to look for the component.')
-  .action((name) => {
-    removeComponent(name, (err, componentPath) => {
+  .action((name, options) => {
+    removeComponent(name, options, (err, componentPath) => {
       console.log('Component deleted from %s', componentPath);
     });
   });
