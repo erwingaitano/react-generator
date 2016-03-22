@@ -45,7 +45,7 @@ function getPathForComponent(path, cb) {
         cb(null, componentsFolder);
       } else {
         const error = new Error('Could not find a sub components folder');
-        error.name = 'NotFoundError';
+        error.name = 'NotComponentsPathError';
         cb(error);
       }
     });

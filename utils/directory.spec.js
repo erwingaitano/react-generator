@@ -18,4 +18,50 @@ describe('Utils/Directory', function () {
       should(directories).containDeep(['commands', 'templates', 'utils']);
     });
   });
+
+
+  describe('#getPathForComponent()', function () {
+    it('should get the dirpath when dir passed', done => {
+      Directory.getPathForComponent('./', (err, componentsFolder) => {
+        should(componentsFolder).be.equal('./');
+        done();
+      });
+    });
+
+    it('should throw an error if not dir passed and no app|src folder', done => {
+      Directory.getPathForComponent(null, err => {
+        should(err).containDeep({ name: 'NotRootPathError' });
+        done();
+      });
+    });
+
+    describe('These generates dumb outputs:', function () {
+      const fse = require('fs-extra');
+
+      before(() => {
+        fse.mkdirsSync('app/erwin/go');
+      });
+
+      it(`should throw an error if not dir passed, app|src folder exists but
+          no components folder`, done => {
+        Directory.getPathForComponent(null, err => {
+          should(err).be.containDeep({ name: 'NotComponentsPathError' });
+          done();
+        });
+      });
+
+      it(`should generate a path if no dir passed but app|src and components
+          folder exists`, done => {
+        fse.mkdirsSync('app/erwin/go/components/tatata');
+        Directory.getPathForComponent(null, (err, componentsFolder) => {
+          should(componentsFolder).be.equal('app/erwin/go/components');
+          done();
+        });
+      });
+
+      after(() => {
+        fse.removeSync('app');
+      });
+    });
+  });
 });
