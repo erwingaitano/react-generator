@@ -34,7 +34,7 @@ describe('Remove', function () {
       });
     });
 
-    after('clean dump component directory if exists', () => {
+    after('clean dump __test__ directory if exists', () => {
       fse.removeSync('__test__');
     });
   });
