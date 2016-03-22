@@ -15,26 +15,37 @@ $ npm install -g react-generator
 
 ## Usage
 
+### Create a component
+
 ```
 $ react-generator component myComponent
 ```
 
-Creates a folder *myComponent* in one of these folders: `./app/**/components`, `./src/**/components` or `./`, containing the files:
+Creates a folder *myComponent* in `./app/**/components` or`./src/**/components` containing the files:
   * myComponent.scss
   * myComponent.js
   * myComponent.spec.js
 
-You can also pass a folder dir using the option --dir:
+Note that `./app/**/components` or `./src/**/components` must exist otherwise it will throw an error.
+This is to enforce that you have the proper folder structure where components should live.
+
+If you decide to force the path, you can pass a folder dir using the option --dir:
 
 ```
-$ react-generator component myComponent --dir  my/custom/path
+$ react-generator component myComponent --dir ./my/custom/path
 ```
 
-Remove a component
+This will create the `./my/custom/path/myComponent` folder.
+
+### Remove a component
 
 ```
 $ react-generator remove-component myComponent
 ```
+
+The same rules apply also for `remove-component`, if there's no `./app/**/components`
+or`./src/**/components`folder, then it doesn't remove anything and throws an error.
+But you can pass the --dir option and it will delete the `myComponent` folder inside that dir.
 
 
 For more info or help:
