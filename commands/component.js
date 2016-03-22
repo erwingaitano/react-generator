@@ -126,11 +126,7 @@ function createComponent(name, options, cb) {
   getOutputDirForComponent(settings.dir, (err, outputDir) => {
     const componentTemplateDir = path.resolve(__dirname, '../templates/component');
     generateFiles(componentTemplateDir, name, outputDir, options, (err, name, outputDir) => {
-      if (err) {
-        console.log(err.message);
-        cb(err);
-        return;
-      }
+      if (err) { cb(err); return; }
 
       const dirGenerated = outputDir.replace(/\/$/, '/') + name;
       if (cb) cb(null, name, dirGenerated);
