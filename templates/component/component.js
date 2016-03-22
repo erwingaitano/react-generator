@@ -6,7 +6,7 @@ import './__COMPONENT_NAME__.scss';
 
 export default class Component extends React.Component {
   render() {
-    const classes = classNames('list', this.props.classes);
+    const classes = classNames('__COMPONENT_NAME__', this.props.classes);
 
     return (
       <div className={classes}>
