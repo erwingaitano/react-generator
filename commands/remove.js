@@ -35,7 +35,7 @@ function removeComponent(name, options, cb) {
   dirUtility.getPathForComponent(settings.dir, (err, componentParentPath) => {
     if (err) { cb(err); return; }
 
-    const componentPath = `${componentParentPath}/${name}`;
+    const componentPath = `${componentParentPath.replace(/\/$/, '')}/${name}`;
     removeFolder(componentPath, cb);
   });
 }
@@ -51,6 +51,7 @@ program
   .option('-d, --dir <directory>', 'Directory where to look for the component.')
   .action((name, options) => {
     removeComponent(name, options, (err, componentPath) => {
+      if (err) throw err;
       console.log('Component deleted from %s', componentPath);
     });
   });
