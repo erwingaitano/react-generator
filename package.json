@@ -7,7 +7,7 @@
     "react-generator": "./index.js"
   },
   "vars": {
-    "mocha": "./node_modules/mocha/bin/_mocha ./**/*.spec.js"
+    "mocha": "./node_modules/mocha/bin/_mocha ./commands/**/*.spec.js"
   },
   "scripts": {
     "test": "$npm_package_vars_mocha",
