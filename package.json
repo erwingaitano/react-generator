@@ -7,8 +7,9 @@
     "react-generator": "./index.js"
   },
   "scripts": {
-    "test": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha **/*.spec.js",
-    "coverage": "open ./coverage/lcov-report/index.html"
+    "test": "./node_modules/.bin/_mocha ./**/*.spec.js",
+    "coverage": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha ./**/*.spec.js",
+    "test-travis-ci-coveralls": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha ./**/*.spec.js --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "keywords": [
     "react",
@@ -23,8 +24,10 @@
     "node-dir": "^0.1.11"
   },
   "devDependencies": {
+    "coveralls": "^2.11.8",
     "istanbul": "^0.4.2",
     "mocha": "^2.4.5",
+    "mocha-lcov-reporter": "^1.2.0",
     "should": "^8.2.2"
   }
 }
