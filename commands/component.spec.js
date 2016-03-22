@@ -108,7 +108,7 @@ describe('Component', function () {
         fse.mkdirsSync(`${dumpComponentsPath}/${compName}`);
       });
 
-      it.only(`should create a component in ${dumpComponentsPath}`, done => {
+      it(`should create a component in ${dumpComponentsPath}`, done => {
         Component.createComponent(compName, null, (err, name, dirGenerated) => {
           if (err) { done(err); return; }
           should(name).be.equal(compName);

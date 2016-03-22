@@ -33,10 +33,10 @@ describe('Remove', function () {
       });
     });
 
-    it('should throw an error because no directory passed and no sub components folder'
+    it('should throw an error because no directory passed and no src/app folder'
       , done => {
         Remove.removeComponent(compName, null, err => {
-          should(err).containDeep({ name: 'NotFoundError' });
+          should(err).containDeep({ name: 'NotRootPathError' });
           done();
         });
       });
