@@ -1,45 +1,21 @@
-  // describe('#getOutputDirForComponent()', function () {
-  //   it('should return the right folderpath for components', done => {
-  //     const testPath = './';
-  //     const expectedResult = '.';
-  //     const testPath2 = './erwin/go';
-  //     const expectedResult2 = './erwin/go';
+/* eslint prefer-arrow-callback: 0 */
+/* eslint func-names: 0 */
 
-  //     Component.getOutputDirForComponent(testPath, (err, outputDir) => {
-  //       if (err) { done(err); return; }
-  //       should(outputDir).be.equal(expectedResult);
+const should = require('should');
+const Directory = require('./directory');
 
-  //       Component.getOutputDirForComponent(testPath2, (err, outputDir) => {
-  //         if (err) { done(err); return; }
-  //         should(outputDir).be.equal(expectedResult2);
-  //         done();
-  //       });
-  //     });
-  //   });
-
-  //   it('should return error if no components folder found and no dir provided',
-  //     done => {
-  //       Component.getOutputDirForComponent(null, err => {
-  //         should(err).containDeep({ name: 'NotFoundError' });
-  //         done();
-  //       });
-  //     });
-
-  //   it('should return error if no dir provided and app nor src folder exists');
-  //   it(`should return error if no dir provided and app or src do exist but
-  //       no components folder`);
-
-  //   it('should return inside components folder it exists and no dir provided', done => {
-  //     const fse = require('fs-extra');
-  //     const dumbDir = '__test__/__dump__/components';
-
-  //     fse.mkdirsSync(dumbDir);
-  //     Component.getOutputDirForComponent(null, (err, outputDir) => {
-  //       if (err) { done(err); return; }
-  //       should(outputDir).be.equal(dumbDir);
-  //       fse.removeSync('__test__');
-  //       done();
-  //     });
-  //   });
-  // });
-
+describe('Utils/Directory', function () {
+  describe('#getDirectories()', function () {
+    it('should get the top level directories of the root', () => {
+      const path = require('path');
+      /**
+       * Get all top level directories of the given path
+       *
+       * @param  {String} srcpath  The src where to look for the directories
+       * @return {Array}  List     of top level directories
+       */
+      const directories = Directory.getDirectories(path.resolve(__dirname, '..'));
+      should(directories).containDeep(['commands', 'templates', 'utils']);
+    });
+  });
+});
