@@ -6,19 +6,21 @@
 
 const fse = require('fs-extra');
 const program = require('commander');
-const dir = require('node-dir');
 const dirUtility = require('../utils/directory');
 
 /**
- * -Pure- Returns the folderpath to eliminate.
+ * Removes a folder
  *
- * @param  {String=} dirpath  Component parent folder
- * @param  {String}  name     Component name
- * @return {String}  _        The component dirpath
+ * @param {String}   folderToEliminate  Folder to eliminate
+ * @param {Function} cb                 cb(err, folderToEliminate)
  */
-function getFolderToEliminatePath(dirpath, name) {
-  if (!dirpath) dirpath = '.';
-  return `${dirpath}/${name}`;
+function removeFolder(folderToEliminate, cb) {
+  try {
+    fse.removeSync(folderToEliminate);
+    cb(null, folderToEliminate);
+  } catch (e) {
+    cb(e);
+  }
 }
 
 /**
@@ -28,23 +30,13 @@ function getFolderToEliminatePath(dirpath, name) {
  * @param {Function} cb    cb(err, componentPath)
  */
 function removeComponent(name, options, cb) {
-  const settings = Object.assign({
-    dir: './'
-  }, options);
+  const settings = Object.assign({}, options);
 
-  const sourceFolder = dirUtility.getSourceFolder(settings.dir);
-  console.log(sourceFolder);
-  dir.subdirs(sourceFolder, (err, subdirs) => {
-    if (err) cb(err);
+  dirUtility.getPathForComponent(settings.dir, (err, componentParentPath) => {
+    if (err) { cb(err); return; }
 
-    try {
-      const componentsFolder = subdirs.find(el => /components$/.test(el));
-      const folderToEliminate = getFolderToEliminatePath(componentsFolder, name);
-      fse.removeSync(folderToEliminate);
-      cb(null, folderToEliminate);
-    } catch (e) {
-      cb(e);
-    }
+    const componentPath = `${componentParentPath}/${name}`;
+    removeFolder(componentPath, cb);
   });
 }
 
@@ -64,6 +56,6 @@ program
   });
 
 module.exports = {
-  getFolderToEliminatePath,
+  removeFolder,
   removeComponent
 };

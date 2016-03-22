@@ -7,7 +7,7 @@ const Component = require('./component');
 describe('Component', function () {
   describe('#getFileStringTransformed()', function () {
     it('should leave css stuff', () => {
-      const compName = '__dump_comp__';
+      const compName = '__dumb_comp__';
       const expectedString = 'random things inside';
       const testString = `/* CSS */${expectedString}/* CSS-END */`;
       const testString2 = `/* CSS */\n${expectedString}\n/* CSS-END */`;
@@ -26,7 +26,7 @@ describe('Component', function () {
     });
 
     it('should remove css stuff', () => {
-      const compName = '__dump_comp__';
+      const compName = '__dumb_comp__';
       const testString = '/* CSS */random things inside/* CSS-END */';
       const testString2 = 'ee\n /* CSS */\n$random things \n/* CSS-END */\n dummy stuff';
 
@@ -40,7 +40,7 @@ describe('Component', function () {
     });
 
     it('should replace __COMPONENT_NAME__ with the component name', () => {
-      const compName = '__dump_comp__';
+      const compName = '__dumb_comp__';
       const testString = 'this; is; a test; __COMPONENT_NAME__ string; string;';
       const expectedString = `this; is; a test; ${compName} string; string;`;
       const resultString = Component.getFileStringTransformed(testString, compName);
@@ -72,84 +72,55 @@ describe('Component', function () {
     });
   });
 
-  describe('#getOutputDirForComponent()', function () {
-    it('should return the right folderpath for components', done => {
-      const testPath = './';
-      const expectedResult = './';
-      const testPath2 = './erwin/go';
-      const expectedResult2 = './erwin/go';
-
-      Component.getOutputDirForComponent(testPath, (err, outputDir) => {
-        if (err) { done(err); return; }
-        should(outputDir).be.equal(expectedResult);
-
-        Component.getOutputDirForComponent(testPath2, (err, outputDir) => {
-          if (err) { done(err); return; }
-          should(outputDir).be.equal(expectedResult2);
-          done();
-        });
-      });
-    });
-
-    it('should return current dir if not inside components folder and no dir provided',
-      done => {
-        Component.getOutputDirForComponent(null, (err, outputDir) => {
-          if (err) { done(err); return; }
-          should(outputDir).be.equal('./');
-          done();
-        });
-      });
-
-    it('should return inside components folder it exists and no dir provided', done => {
-      const fse = require('fs-extra');
-      const dumbDir = '__test__/__dump__/components';
-
-      fse.mkdirsSync(dumbDir);
-      Component.getOutputDirForComponent(null, (err, outputDir) => {
-        if (err) { done(err); return; }
-        should(outputDir).be.equal(dumbDir);
-        fse.removeSync('__test__');
-        done();
-      });
-    });
-  });
-
   describe('Following tests generate output files:', function () {
-    const compName = '__dump_comp__';
+    const compName = '__dumb_comp__';
 
     describe('#generateFiles()', function () {
       it('should write the component generated files in the output dir', done => {
         const path = require('path');
-        const outputDir = './';
+        const outputDir = './components';
         const componentTemplateDir = path.resolve(__dirname, '../templates/component');
 
         Component.generateFiles(componentTemplateDir, compName, outputDir, null,
           (err, componentName, resultOutputDir) => {
-            if (err) done(err);
+            if (err) { done(err); return; }
             should(componentName).be.equal(compName);
             should(resultOutputDir).be.equal(outputDir);
             done();
           });
       });
+
+      after(done => {
+        const fse = require('fs-extra');
+        const folderToEliminate = './components';
+
+        fse.removeSync(folderToEliminate);
+        done();
+      });
     });
 
     describe('#createComponent()', function () {
-      it('should create a component', done => {
+      const compName = '__comp__';
+      const dumpComponentsPath = 'app/__dump__/components';
+      const fse = require('fs-extra');
+
+      before('create a dumb component directory', () => {
+        fse.mkdirsSync(`${dumpComponentsPath}/${compName}`);
+      });
+
+      it.only(`should create a component in ${dumpComponentsPath}`, done => {
         Component.createComponent(compName, null, (err, name, dirGenerated) => {
-          if (err) done(err);
+          if (err) { done(err); return; }
           should(name).be.equal(compName);
           should(dirGenerated).be.equal(dirGenerated);
           done();
         });
       });
-    });
 
-    after(done => {
-      const fse = require('fs-extra');
-      const folderToEliminate = `./${compName}`;
-
-      fse.removeSync(folderToEliminate);
-      done();
+      after(done => {
+        fse.removeSync('app');
+        done();
+      });
     });
   });
 });

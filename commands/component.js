@@ -57,31 +57,9 @@ function getInfoFromFilenamePath(filepath) {
 }
 
 /**
- * Get dirpath for the components folder
- *
- * @param {String=}  dirpath  Folder where components will be inserted
- * @param {Function} cb       Callback(err, outputDir)
- */
-function getOutputDirForComponent(dirpath, cb) {
-  if (dirpath) {
-    const outputDir = dirpath;
-    cb(null, outputDir);
-  } else {
-    const sourceFolder = dirUtility.getSourceFolder('./');
-    dir.subdirs(sourceFolder, (err, subdirs) => {
-      if (err) throw err;
-
-      // If no components subfolder is found, we create the component in the current dir
-      const outputDir = subdirs.find(el => /components$/.test(el)) || './';
-      cb(null, outputDir);
-    });
-  }
-}
-
-/**
  * Generate the files from the template files and write them in the outputdir path
  *
- * @param {String}   dirname       Component template folder containing the files
+ * @param {String}   templatePath  Component template folder containing the files
  * @param {String}   compName      Component name
  * @param {String}   outputDir     Directory where the component will be copied
  * @param {Object=}  options
@@ -89,13 +67,13 @@ function getOutputDirForComponent(dirpath, cb) {
  * @param {Bool}     options.test  Should have test stuff
  * @param {Function} cb            cb(err, compName, outputDir)
  */
-function generateFiles(dirname, compName, outputDir, options, cb) {
+function generateFiles(templatePath, compName, outputDir, options, cb) {
   const settings = Object.assign({
     css: true,
     test: true
   }, options);
 
-  fse.copy(dirname, `${outputDir}/${compName}`, {
+  fse.copy(templatePath, `${outputDir}/${compName}`, {
     filter(file) {
       if (!settings.css && file.split('/').pop().indexOf('.scss') !== -1) return false;
       if (!settings.test && file.split('/').pop().indexOf('.spec.js') !== -1) return false;
@@ -123,7 +101,9 @@ function generateFiles(dirname, compName, outputDir, options, cb) {
  */
 function createComponent(name, options, cb) {
   const settings = Object.assign({}, options);
-  getOutputDirForComponent(settings.dir, (err, outputDir) => {
+  dirUtility.getPathForComponent(settings.dir, (err, outputDir) => {
+    if (err) { cb(err); return; }
+
     const componentTemplateDir = path.resolve(__dirname, '../templates/component');
     generateFiles(componentTemplateDir, name, outputDir, options, (err, name, outputDir) => {
       if (err) { cb(err); return; }
@@ -157,7 +137,6 @@ program
 module.exports = {
   getFileStringTransformed,
   getInfoFromFilenamePath,
-  getOutputDirForComponent,
   generateFiles,
   createComponent
 };
