@@ -1,7 +1,7 @@
 /* eslint prefer-arrow-callback: 0 */
 /* eslint func-names: 0 */
 
-const should = require('should');
+const expect = require('chai').expect;
 const Component = require('./component');
 
 describe('Component', function () {
@@ -19,10 +19,10 @@ describe('Component', function () {
       const resultString3 = Component.getFileStringTransformed(testString3, compName);
       const resultString4 = Component.getFileStringTransformed(testString4, compName);
 
-      should(resultString).be.equal(expectedString);
-      should(resultString2).be.equal(expectedString);
-      should(resultString3).be.equal(`${expectedString}\na \nb\n c`);
-      should(resultString4).be.equal(`ee\n ${expectedString}\n dummy stuff`);
+      expect(resultString).to.equal(expectedString);
+      expect(resultString2).to.equal(expectedString);
+      expect(resultString3).to.equal(`${expectedString}\na \nb\n c`);
+      expect(resultString4).to.equal(`ee\n ${expectedString}\n dummy stuff`);
     });
 
     it('should remove css stuff', () => {
@@ -35,8 +35,8 @@ describe('Component', function () {
       const resultString2 = Component.getFileStringTransformed(testString2, compName,
         { css: false });
 
-      should(resultString.trim()).be.equal('');
-      should(resultString2.trim()).be.equal(`ee\n  dummy stuff`);
+      expect(resultString.trim()).to.equal('');
+      expect(resultString2.trim()).to.equal(`ee\n  dummy stuff`);
     });
 
     it('should replace __COMPONENT_NAME__ with the component name', () => {
@@ -44,7 +44,7 @@ describe('Component', function () {
       const testString = 'this; is; a test; __COMPONENT_NAME__ string; string;';
       const expectedString = `this; is; a test; ${compName} string; string;`;
       const resultString = Component.getFileStringTransformed(testString, compName);
-      should(resultString).be.equal(expectedString);
+      expect(resultString).to.equal(expectedString);
     });
   });
 
@@ -58,7 +58,7 @@ describe('Component', function () {
       };
 
       const result1 = Component.getInfoFromFilenamePath(testFilepath1);
-      result1.should.be.deepEqual(expectedResult1);
+      expect(result1).to.deep.equal(expectedResult1);
 
       const testFilepath2 = '/User/kappa/ross/erwingo.js.jsx';
       const expectedResult2 = {
@@ -68,7 +68,7 @@ describe('Component', function () {
       };
 
       const result2 = Component.getInfoFromFilenamePath(testFilepath2);
-      result2.should.be.deepEqual(expectedResult2);
+      expect(result2).to.deep.equal(expectedResult2);
     });
   });
 
@@ -84,8 +84,8 @@ describe('Component', function () {
         Component.generateFiles(componentTemplateDir, compName, outputDir, null,
           (err, componentName, resultOutputDir) => {
             if (err) { done(err); return; }
-            should(componentName).be.equal(compName);
-            should(resultOutputDir).be.equal(outputDir);
+            expect(componentName).to.equal(compName);
+            expect(resultOutputDir).to.equal(outputDir);
             done();
           });
       });
@@ -111,8 +111,8 @@ describe('Component', function () {
       it(`should create a component in ${dumpComponentsPath}`, done => {
         Component.createComponent(compName, null, (err, name, dirGenerated) => {
           if (err) { done(err); return; }
-          should(name).be.equal(compName);
-          should(dirGenerated).be.equal(dirGenerated);
+          expect(name).to.equal(compName);
+          expect(dirGenerated).to.equal(dirGenerated);
           done();
         });
       });

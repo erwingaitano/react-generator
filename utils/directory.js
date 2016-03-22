@@ -33,8 +33,7 @@ function getPathForComponent(path, cb) {
   const dir = require('node-dir');
 
   if (!rootPath) {
-    const error = new Error('Could not find a src or app folder');
-    error.name = 'NotRootPathError';
+    const error = new Error('NoRootPathError: Could not find a src or app folder');
     cb(error);
   } else {
     dir.subdirs(rootPath, (err, subdirs) => {
@@ -44,8 +43,7 @@ function getPathForComponent(path, cb) {
       if (componentsFolder) {
         cb(null, componentsFolder);
       } else {
-        const error = new Error('Could not find a sub components folder');
-        error.name = 'NotComponentsPathError';
+        const error = new Error('NoComponentsPathError: Could not find a sub components folder');
         cb(error);
       }
     });

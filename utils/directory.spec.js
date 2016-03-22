@@ -1,7 +1,7 @@
 /* eslint prefer-arrow-callback: 0 */
 /* eslint func-names: 0 */
 
-const should = require('should');
+const expect = require('chai').expect;
 const Directory = require('./directory');
 
 describe('Utils/Directory', function () {
@@ -15,7 +15,7 @@ describe('Utils/Directory', function () {
        * @return {Array}  List     of top level directories
        */
       const directories = Directory.getDirectories(path.resolve(__dirname, '..'));
-      should(directories).containDeep(['commands', 'templates', 'utils']);
+      expect(directories).to.contain('commands', 'templates', 'utils');
     });
   });
 
@@ -23,14 +23,15 @@ describe('Utils/Directory', function () {
   describe('#getPathForComponent()', function () {
     it('should get the dirpath when dir passed', done => {
       Directory.getPathForComponent('./', (err, componentsFolder) => {
-        should(componentsFolder).be.equal('./');
+        expect(componentsFolder).to.equal('./');
         done();
       });
     });
 
     it('should throw an error if not dir passed and no app|src folder', done => {
       Directory.getPathForComponent(null, err => {
-        should(err).containDeep({ name: 'NotRootPathError' });
+        expect(err).to.be.an('error').and.have.property('message')
+          .to.contain('NoRootPathError:');
         done();
       });
     });
@@ -45,7 +46,8 @@ describe('Utils/Directory', function () {
       it(`should throw an error if not dir passed, app|src folder exists but
           no components folder`, done => {
         Directory.getPathForComponent(null, err => {
-          should(err).be.containDeep({ name: 'NotComponentsPathError' });
+          expect(err).to.be.an('error').and.have.property('message')
+            .contain('NoComponentsPathError:');
           done();
         });
       });
@@ -54,7 +56,7 @@ describe('Utils/Directory', function () {
           folder exists`, done => {
         fse.mkdirsSync('app/erwin/go/components/tatata');
         Directory.getPathForComponent(null, (err, componentsFolder) => {
-          should(componentsFolder).be.equal('app/erwin/go/components');
+          expect(componentsFolder).to.equal('app/erwin/go/components');
           done();
         });
       });
