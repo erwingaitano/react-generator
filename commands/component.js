@@ -7,7 +7,6 @@
 const fse = require('fs-extra');
 const path = require('path');
 const program = require('commander');
-const dir = require('node-dir');
 const dirUtility = require('../utils/directory');
 
 /**
@@ -31,6 +30,12 @@ function getFileStringTransformed(fileString, compName, options) {
     output = fileString.replace(/\/\* CSS \*\/([\s|\S]*?)\/\* CSS-END \*\/ *\n?([\s|\S]*)/, '$2');
   }
 
+  // component title
+  const firstLetter = compName.charAt(0).toUpperCase();
+  let compNamePascalCase = compName.slice(1);
+  compNamePascalCase = compNamePascalCase.replace(/-(\w)/g, (v) => v.slice(1).toUpperCase());
+
+  output = output.replace(/__COMPONENT_NAME__PASCAL_CASE/g, firstLetter + compNamePascalCase);
   output = output.replace(/__COMPONENT_NAME__/g, compName);
   return output;
 }

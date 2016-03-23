@@ -1,5 +1,6 @@
 /* eslint prefer-arrow-callback: 0 */
 /* eslint func-names: 0 */
+'use strict';
 
 const expect = require('chai').expect;
 const Component = require('./component');
@@ -43,6 +44,15 @@ describe('Component', function () {
       const compName = '__dumb_comp__';
       const testString = 'this; is; a test; __COMPONENT_NAME__ string; string;';
       const expectedString = `this; is; a test; ${compName} string; string;`;
+      const resultString = Component.getFileStringTransformed(testString, compName);
+      expect(resultString).to.equal(expectedString);
+    });
+
+    it(`should replace __COMPONENT_NAME__PASCAL_CASE with the
+      component name in pascal case`, () => {
+      const compName = 'dumb-comp';
+      const testString = 'this; is; a test; __COMPONENT_NAME__PASCAL_CASE string; string;';
+      const expectedString = 'this; is; a test; DumbComp string; string;';
       const resultString = Component.getFileStringTransformed(testString, compName);
       expect(resultString).to.equal(expectedString);
     });

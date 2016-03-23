@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import './__COMPONENT_NAME__.scss';
 /* CSS-END */
 
-export default class Component extends React.Component {
+export default class __COMPONENT_NAME__PASCAL_CASE extends React.Component {
   render() {
     const classes = classNames('__COMPONENT_NAME__', this.props.classes);
 
@@ -16,6 +16,6 @@ export default class Component extends React.Component {
   }
 }
 
-Component.propTypes = {
+__COMPONENT_NAME__PASCAL_CASE.propTypes = {
   classes: React.PropTypes.string
 };
