@@ -5,6 +5,14 @@ import './__COMPONENT_NAME__.scss';
 /* CSS-END */
 
 export default class __COMPONENT_NAME__PASCAL_CASE extends React.Component {
+  componentWillMount() {}
+  componentDidMount() {}
+  componentWillReceiveProps() {}
+  shouldComponentUpdate() { return true; }
+  componentWillUpdate() {}
+  componentDidUpdate() {}
+  componentWillUnmount() {}
+
   render() {
     const classes = classNames('__COMPONENT_NAME__', this.props.classes);
 
